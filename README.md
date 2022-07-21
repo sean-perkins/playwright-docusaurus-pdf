@@ -1,4 +1,12 @@
-## Playwright Docusaurus PDF
+<p align="center">
+  <img src="https://github.com/sean-perkins/stencil-playwright/blob/main/.github/assets/docusaurus-logo.png?raw=true" width="60" />
+  +
+  <img src="https://github.com/sean-perkins/stencil-playwright/blob/main/.github/assets/playwright-logo.svg?raw=true" width="60">
+</p>
+
+<h1 align="center">
+  Playwright Docusaurus PDF
+</h1>
 
 > **This project is still in active development. You can clone or fork the repository to use in your own projects.**
 
