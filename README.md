@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/sean-perkins/stencil-playwright/blob/main/.github/assets/docusaurus-logo.png?raw=true" width="60" />
+  <img src="https://github.com/sean-perkins/stencil-playwright/blob/main/.github/assets/docusaurus-logo.svg?raw=true" width="60" />
   +
   <img src="https://github.com/sean-perkins/stencil-playwright/blob/main/.github/assets/playwright-logo.svg?raw=true" width="60">
 </p>
