@@ -1,0 +1,31 @@
+{
+  "name": "playwright-docusaurus-pdf",
+  "version": "1.0.0",
+  "description": "PDF generator for Docusaurus 2+ using Playwright",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sean Perkins",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^4.7.3"
+  },
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "commander": "^9.3.0",
+    "pdf-lib": "^1.17.1",
+    "pdf-merger-js": "^3.4.0",
+    "picocolors": "^1.0.0",
+    "playwright": "^1.22.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "docusaurus-pdf": "./dist/index.js"
+  }
+}
