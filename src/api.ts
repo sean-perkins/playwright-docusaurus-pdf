@@ -22,7 +22,23 @@ interface Options {
    * The 
    */
   baseUrl: string;
+  /**
+   * The format of the generated PDF. Can be used to make
+   * the PDF pages printable on A4 paper.
+   */
+  format?: string; // A4 
+  /**
+   * Replaces all baseUrl links with the provided string.
+   */
+  baseUrlReplacement?: string;
+  /**
+   * A delay to wait for generating the PDF page. Allows for JavaScript
+   * hydration to complete.
+   */
+  pageDelay?: number;
 }
+
+type GeneratePageOptions = Pick<Options, 'format' | 'baseUrlReplacement' | 'baseUrl' | 'pageDelay'>;
 
 export async function run(options: Options) {
   const { firstDocsPath, baseUrl, outputPath } = options;
@@ -35,16 +51,48 @@ export async function run(options: Options) {
   console.log(pc.green('Crawling docs: ' + url));
 
   await page.goto(url, { waitUntil: "networkidle" });
-  await queryNextPage(page);
+  
+  await queryNextPage(page, options);
 
   await browser.close();
 
   await mergePdfOutput(outputPath);
 }
 
-async function generatePdfPage(page: Page) {
+async function generatePdfPage(page: Page, options: GeneratePageOptions) {
+  if (options.pageDelay !== undefined) {
+    // Adds delay to allow the page to load from JS hydration (need to make this an option).
+    await page.waitForTimeout(options.pageDelay);
+  }
+  // Removes all elements with the class "hide-on-print" from the DOM.
+  await page.evaluate(() => {
+    document.querySelectorAll('.hide-on-print').forEach(function(el) {
+      el.remove();
+    });
+  });
+
+  if (options.baseUrlReplacement) {
+    await page.evaluate(([baseUrl, baseUrlReplacement]) => {
+      document.querySelectorAll('a').forEach(function(el) {
+        el.href = el.href.replace(baseUrl, baseUrlReplacement);
+      });
+    }, [options.baseUrl, options.baseUrlReplacement]);
+  }
+  
+  await page.waitForSelector('.hide-on-print', { state: 'detached' });
+
+  // Get the full scroll height and width of the page.
+  const { width, height } = await page.evaluate(() => {
+    return {
+      width: document.documentElement.scrollWidth,
+      height: document.documentElement.scrollHeight,
+    }
+  });
+
   const pdf = await page.pdf({
-    format: "A4",
+    format: options?.format,
+    width,
+    height,
     printBackground: true,
     margin: {
       top: 25,
@@ -65,8 +113,8 @@ async function generatePdfPage(page: Page) {
   console.log(pc.green(`Generated PDF: dist/tmp/${counter - 1}.pdf`));
 }
 
-async function queryNextPage(page: Page) {
-  await generatePdfPage(page);
+async function queryNextPage(page: Page, options: GeneratePageOptions) {
+  await generatePdfPage(page, options);
 
   const hasNextButton = await page.$(".pagination-nav__link--next");
 
@@ -75,7 +123,7 @@ async function queryNextPage(page: Page) {
 
     if (nextPageButton) {
       await nextPageButton.click();
-      await queryNextPage(page);
+      await queryNextPage(page, options);
     }
   }
 }

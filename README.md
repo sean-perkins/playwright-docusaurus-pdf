@@ -20,6 +20,32 @@ If you need to generate multiple PDFs for separate docs instances, invoke the CL
 npx playwright-docusaurus-pdf -o ./dist/output.pdf -base-url http://localhost:3000 -p /docs/welcome
 ```
 
+### Options
+
+### `-o`, `--output-file`
+
+The destination path for the generated PDF.
+
+### `-base-url`, `--base-url`
+
+The URL to open to crawl with playwright.
+
+### `-p`, `--path`
+
+The initial page path to open.
+
+#### `-d`, `--delay`
+
+The option delay to add to page loads before capturing the image for the PDF. Used to offset long JavaScript render delays.
+
+#### `-r`, `--replace`
+
+Replace all instances of the `baseUrl` in link tags with a destination url. Used to replace local environment urls with a production url.
+
+#### `-f`, `--format`
+
+The page format such as `A4`. If unspecified, each page will resize to the scrollable width and height of the webpage.
+
 ## Development
 
 ### Install dependencies
