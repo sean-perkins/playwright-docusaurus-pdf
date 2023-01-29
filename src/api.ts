@@ -61,8 +61,9 @@ export async function run(options: Options) {
 
 async function generatePdfPage(page: Page, options: GeneratePageOptions) {
   if (options.pageDelay !== undefined) {
+    let delay = typeof options.pageDelay === 'number' ? options.pageDelay : parseInt(options.pageDelay);
     // Adds delay to allow the page to load from JS hydration (need to make this an option).
-    await page.waitForTimeout(options.pageDelay);
+    delay && await page.waitForTimeout(delay);
   }
   // Removes all elements with the class "hide-on-print" from the DOM.
   await page.evaluate(() => {
