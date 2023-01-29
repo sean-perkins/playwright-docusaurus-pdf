@@ -79,8 +79,12 @@ async function generatePdfPage(page: Page, options: GeneratePageOptions) {
       });
     }, [options.baseUrl, options.baseUrlReplacement]);
   }
-  
-  await page.waitForSelector('.hide-on-print', { state: 'detached' });
+
+  const itemsToRemove = await page.$$('.hide-on-print');
+
+  if (itemsToRemove.length > 0) {
+   await page.waitForTimeout(1000);
+  }
 
   // Get the full scroll height and width of the page.
   const { width, height } = await page.evaluate(() => {

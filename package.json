@@ -1,6 +1,6 @@
 {
   "name": "playwright-docusaurus-pdf",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "PDF generator for Docusaurus 2+ using Playwright",
   "scripts": {
     "build": "tsc -p .",
